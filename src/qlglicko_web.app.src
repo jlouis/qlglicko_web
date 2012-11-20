@@ -1,0 +1,15 @@
+{application, qlglicko_web,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  lager,
+                  crypto, ranch, cowboy,
+                  qlglicko_core
+                 ]},
+  {mod, { qlglicko_web_app, []}},
+  {env, []}
+ ]}.
