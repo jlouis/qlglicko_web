@@ -14,7 +14,7 @@ start(_StartType, _StartArgs) ->
         {[], cowboy_static,
           [{directory, {priv_dir, qlglicko_web, [<<"www">>]}},
            {file, <<"index.html">>}]},
-        [<<"player">>, '...'], qlglicko_web_handler, []}]}],
+        {[<<"player">>, '...'], qlglicko_web_handler, []}]}],
 
     cowboy:start_http(qlglicko_cowboy_listener, 100,
         [{port, 8080}], [{dispatch, Dispatch}]),
