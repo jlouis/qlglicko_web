@@ -33,7 +33,7 @@ terminate(_Req, _State) ->
 %% Internal players
 %% -------------------------------
 
-format_entries([]) -> [];
+format_entries([]) -> null;
 format_entries([{Map, R, RD} | Next]) ->
   [{Map, [{<<"rank">>, round(R)}, {<<"rank_deviaton">>, round(RD)}]} | format_entries(Next)].
 
