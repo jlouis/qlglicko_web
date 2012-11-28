@@ -13,6 +13,8 @@ start(_StartType, _StartArgs) ->
     Dispatch = [{'_', [
         {[], cowboy_static,
           [{directory, {priv_dir, qlglicko_web, [<<"www">>]}},
+           {mimetypes, [{<<".html">>, [<<"text/html">>]}]},
+           {etag, default},
            {file, <<"index.html">>}]},
         {[<<"player">>, '...'], qlglicko_web_handler, []}]}],
 
