@@ -10,13 +10,14 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
-    Dispatch = [
-        %% {URIHost, list({URIPath, Handler, Opts})}
-        {'_', [{'_', qlglicko_web_handler, []}]}
-    ],
-    %% Name, NbAcceptors, TransOpts, ProtoOpts
+    Dispatch = [{'_', [
+        {[], cowboy_static,
+          [{directory, {priv_dir, qlglicko_web, [<<"www">>]}},
+           {file, <<"index.html">>}]},
+        [<<"player">>, '...'], qlglicko_web_handler, []}]}],
+
     cowboy:start_http(qlglicko_cowboy_listener, 100,
-        [{port, 8080}], [{dispatch, Dispatch}]).
+        [{port, 8080}], [{dispatch, Dispatch}]),
     qlglicko_web_sup:start_link().
 
 stop(_State) ->
