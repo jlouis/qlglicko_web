@@ -1,6 +1,49 @@
 <html>
 <head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="/static/jquery.sparkline.min.js"></script>
 <title>Testing</title>
 </head>
-<body>It works!</body>
+<body>
+<h1>Rankings</h1>
+<form>
+      <fieldset>
+        <legend>Player Input</legend>
+        <p>
+          <label>Player</label>
+          <input type = "text"
+                 id = "player_to_add"
+                 value = "" />
+        </p>
+        <button type = "button" id = "add">Add</button>
+      </fieldset>
+     </form>
+<div id="maps">
+</div>
+<script type="text/javascript">
+  create = function(k) {
+    if ($('#' + k).length == 0) {
+      $('<div/>', {
+        'id': k,
+        html : $('<h1/>', { html : k })
+      }).appendTo('#maps');
+    }
+  };
+
+  $(document).ready(function() {
+    $('#add').click(function() {
+      player = $('#player_to_add')[0].value;
+      $.getJSON('/player/' + player, function(data) {
+        var items = [];
+
+      $.each(data, function(key, val) {
+        create(key);
+        $('<p/>', { html: player + " " + val['rank'] }).appendTo('#' + key);
+      });
+     
+      });
+    });
+  });
+    </script>
+</body>
 </html>

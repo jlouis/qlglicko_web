@@ -16,6 +16,10 @@ start(_StartType, _StartArgs) ->
            {mimetypes, [{<<".html">>, [<<"text/html">>]}]},
            {etag, default},
            {file, <<"index.html">>}]},
+        {[<<"static">>, '...'], cowboy_static,
+          [{directory, {priv_dir, qlglicko_web, [<<"www">>, <<"static">>]}},
+           {mimetypes, [{<<".js">>, [<<"text/javascript">>]}]},
+           {etag, default}]},
         {[<<"player">>, '...'], qlglicko_web_handler, []}]}],
 
     cowboy:start_http(qlglicko_cowboy_listener, 100,
