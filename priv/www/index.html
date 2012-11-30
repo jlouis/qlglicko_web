@@ -1,5 +1,6 @@
 <html>
 <head>
+<style type="text/css"></style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src="/static/jquery.sparkline.min.js"></script>
 <title>Testing</title>
@@ -20,30 +21,47 @@
      </form>
 <div id="maps">
 </div>
+<div class="template-map" style="display:none"></div>
+<div class="template-player" style="display:none">
+<p><span class="name"></span> <span class="rank"></span> <span class="sparkline"></span></p>
+</div>
 <script type="text/javascript">
-  create = function(k) {
-    if ($('#' + k).length == 0) {
-      $('<div/>', {
-        'id': k,
-        html : $('<h1/>', { html : k })
-      }).appendTo('#maps');
+  create = function(map) {
+    if ($('#' + map).length == 0) {
+      var clone = $('.template-map').clone();
+      $('<h1/>', { html : map }).appendTo(clone);
+      clone.attr('id', map);
+      clone.removeClass('template-map');
+      $('#maps').append(clone.show())
     }
   };
 
+  add_player = function(player, data) {
+    $.each(data, function(map, values) {
+      create(map);
+      
+      var clone = $('.template-player').clone();
+      clone.removeClass('template-player');
+      clone.attr('id', player + '-' + map);
+      clone.find('.name').text(player);
+      clone.find('.rank').text(values['rank']);
+      var r = values['rank'];
+      var rd = values['rank_deviation'];
+      $('#' + map).append(clone.show());
+      clone.find('.sparkline').sparkline([0, r - 2*rd, r - rd, r, r + rd, r + 2*rd, 3000],
+        { type: 'box', raw: true, width: '140px' } );
+      
+    });
+  };
+  
   $(document).ready(function() {
     $('#add').click(function() {
-      player = $('#player_to_add')[0].value;
+      var player = $('#player_to_add')[0].value;
       $.getJSON('/player/' + player, function(data) {
-        var items = [];
-
-      $.each(data, function(key, val) {
-        create(key);
-        $('<p/>', { html: player + " " + val['rank'] }).appendTo('#' + key);
-      });
-     
+        add_player(player, data);
       });
     });
   });
-    </script>
+</script>
 </body>
 </html>

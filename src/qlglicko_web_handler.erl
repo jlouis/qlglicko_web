@@ -35,7 +35,7 @@ terminate(_Req, _State) ->
 
 format_entries([]) -> [];
 format_entries([{Map, R, RD} | Next]) ->
-  [{Map, [{<<"rank">>, round(R)}, {<<"rank_deviaton">>, round(RD)}]} | format_entries(Next)].
+  [{Map, [{<<"rank">>, round(R)}, {<<"rank_deviation">>, round(RD)}]} | format_entries(Next)].
 
 validate_player(P) ->
   case re:run(P, <<"^[a-zA-Z0-9_]+$">>, [{capture, none}]) of
