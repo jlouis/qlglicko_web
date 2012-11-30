@@ -1,6 +1,7 @@
 <html>
 <head>
-<style type="text/css"></style>
+<style type="text/css">
+</style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src="/static/jquery.sparkline.min.js"></script>
 <title>Testing</title>
@@ -21,15 +22,20 @@
      </form>
 <div id="maps">
 </div>
-<div class="template-map" style="display:none"></div>
-<div class="template-player" style="display:none">
-<p><span class="name"></span> <span class="rank"></span> <span class="sparkline"></span></p>
+<div class="template-map" style="display:none"><h1 class="map-header"></h1>
+<table class="players">
+</table>
 </div>
+<table style="display:none">
+<tr class="template-player" style="display:none">
+<td class="name"></td><td class="rank"></td><td><span class="sparkline"></span></td>
+</tr>
+</table>
 <script type="text/javascript">
   create = function(map) {
     if ($('#' + map).length == 0) {
       var clone = $('.template-map').clone();
-      $('<h1/>', { html : map }).appendTo(clone);
+      clone.find('.map-header').text(map);
       clone.attr('id', map);
       clone.removeClass('template-map');
       $('#maps').append(clone.show())
@@ -47,7 +53,7 @@
       clone.find('.rank').text(values['rank']);
       var r = values['rank'];
       var rd = values['rank_deviation'];
-      $('#' + map).append(clone.show());
+      $('#' + map).find('.players').append(clone.show());
       clone.find('.sparkline').sparkline([0, r - 2*rd, r - rd, r, r + rd, r + 2*rd, 3000],
         { type: 'box', raw: true, width: '140px' } );
       
