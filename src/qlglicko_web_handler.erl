@@ -23,8 +23,9 @@ handle_player(invalid, Req, State) ->
     {ok, Req2, State};
 handle_player({valid, Player}, Req, State) ->
     {ok, Entries} = qlg_pgsql_srv:player_rank(Player),
-    
-    {ok, Req2} = cowboy_req:reply(200, [], jsx:to_json(format_entries(Entries), [space, {indent, 2}]), Req),
+    {ok, Streaks} = qlg_pgsql_srv:player_match_streak(Player),
+
+    {ok, Req2} = cowboy_req:reply(200, [], jsx:to_json(format_entries(Entries, Streaks), [space, {indent, 2}]), Req),
     {ok, Req2, State}.
 
 terminate(_Req, _State) ->
@@ -33,10 +34,26 @@ terminate(_Req, _State) ->
 %% Internal players
 %% -------------------------------
 
-format_entries([]) -> [];
-format_entries([{Map, R, RD} | Next]) ->
-  [{Map, [{<<"rank">>, round(R)}, {<<"rank_deviation">>, round(RD)}]} | format_entries(Next)].
+format_entries(Rank, Streak) ->
+  Streaks = format_streaks(Streak),
+  format_rank(Rank, Streaks).
 
+format_rank([], _Streaks) -> [];
+format_rank([{Map, R, RD} | Next], Streaks) ->
+  
+  Matches = proplists:get_value(Map, Streaks, []),
+  [{Map, [{<<"rank">>, round(R)},
+               {<<"rank_deviation">>, round(RD)},
+               {<<"streak">>, Matches}]} | format_rank(Next, Streaks)].
+
+format_streaks(Ss) ->
+  R = sofs:relation([{Map, {Res, Played}} || {Map, Res, Played} <- Ss]),
+  F = sofs:relation_to_family(R),
+  [{Map, order_streaks(Matches)} || {Map, Matches} <- sofs:to_external(F)].
+  
+order_streaks(Matches) ->
+  [F || {F, _} <- lists:reverse(lists:keysort(2, Matches)) ].
+  
 validate_player(P) ->
   case re:run(P, <<"^[a-zA-Z0-9_]+$">>, [{capture, none}]) of
     nomatch -> invalid;

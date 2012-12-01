@@ -1,6 +1,24 @@
 <html>
 <head>
 <style type="text/css">
+thead {
+	color: #000;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+	padding: 9px 24px;
+	background-color:#f8f8f8;
+}
+
+caption {
+	color: #000;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+table {
+	border: 1px;
+}
 </style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src="/static/jquery.sparkline.min.js"></script>
@@ -22,13 +40,22 @@
      </form>
 <div id="maps">
 </div>
-<div class="template-map" style="display:none"><h1 class="map-header"></h1>
-<table class="players">
+<div class="template-map" style="display:none">
+<table>
+  <caption class="map-header"></caption>
+  <thead>
+    <tr><td>Player Name</td><td>Rank</td><td>Match Streak</td><td>Summary</td></tr>
+  </thead>
+  <tbody class="players">
+  </tbody>
 </table>
 </div>
 <table style="display:none">
 <tr class="template-player" style="display:none">
-<td class="name"></td><td class="rank"></td><td><span class="sparkline"></span></td>
+<td class="name"></td>
+<td class="rank"></td>
+<td><span class="streak"></span></td>
+<td><span class="sparkline"></span></td>
 </tr>
 </table>
 <script type="text/javascript">
@@ -56,6 +83,8 @@
       $('#' + map).find('.players').append(clone.show());
       clone.find('.sparkline').sparkline([0, r - 2*rd, r - rd, r, r + rd, r + 2*rd, 3000],
         { type: 'box', raw: true, width: '140px' } );
+      clone.find('.streak').sparkline(values['streak'],
+        { type: 'tristate' } );
       
     });
   };
