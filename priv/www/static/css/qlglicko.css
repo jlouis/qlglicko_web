@@ -14,23 +14,23 @@ thead th{
 	font-weight:bold;
 	font-size:90%;
 	vertical-align:bottom;
-	border-bottom:1px solid #000;
+	border-bottom:1px solid #aaa;
 	margin-bottom:5px;
 }
 tbody th,td{
-	border-right:1px solid #000;
+	border-right:1px solid #aaa;
 }
 
 tbody td,tbody th{
 	padding:2px 10px;
 }
 tbody th{
-	border-left:1px solid #000;
+	border-left:1px solid #aaa;
 }
 tfoot td,tfoot th{
 	margin-top:5px;
 	border:none;
-	border-top:1px solid #000;
+	border-top:1px solid #aaa;
 }
 caption{
 	text-align:left;
