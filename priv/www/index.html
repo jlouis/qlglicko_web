@@ -1,41 +1,59 @@
+<!DOCTYPE html>
 <html>
-<head>
-<style type="text/css">
-thead {
-	color: #000;
-	font-size: 12px;
-	font-weight: bold;
-	line-height: 18px;
-	padding: 9px 24px;
-	background-color:#f8f8f8;
-}
+  <head>
+    <title>QLGlicko - Quake Live ranking for the masses</title>
+    <!-- Bootstrap -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/static/css/qlglicko.css" rel="stylesheet" media="screen">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Project name</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#rank-players">Rank Players</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#faq">FAQ</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="container">
 
-caption {
-	color: #000;
-	font-size: 18px;
-	font-weight: bold;
-}
+      <h1>QLGlicko 2 ranking stats</h1>
+      <p class="lead">Look up rankings of players on different maps and see how well they are performing.</p>
+	<!-- Download
+          ================================================== -->
+        <section id="rank-players">
+          <div class="page-header">
+            <h1>Rank Players</h1>
+          </div>
+          <p>Currently, the player ranker is <em>very</em> strict about what it gets. In particular, you need to supply correct capital letters in the right spots to make the system guess at what you typed.</p>
 
-table {
-	border: 1px;
-}
-</style>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript" src="/static/jquery.sparkline.min.js"></script>
-<title>Testing</title>
-</head>
-<body>
-<h1>Rankings</h1>
-<form>
+<form id="player-form">
       <fieldset>
         <legend>Player Input</legend>
         <p>
           <label>Player</label>
           <input type = "text"
                  id = "player_to_add"
-                 value = "" />
-        </p>
-        <button type = "button" id = "add">Add</button>
+                 value = "" /></p>
+          <button class="btn" type = "submit" id = "add">Add</button>
       </fieldset>
      </form>
 <div id="maps">
@@ -58,45 +76,50 @@ table {
 <td><span class="sparkline"></span></td>
 </tr>
 </table>
-<script type="text/javascript">
-  create = function(map) {
-    if ($('#' + map).length == 0) {
-      var clone = $('.template-map').clone();
-      clone.find('.map-header').text(map);
-      clone.attr('id', map);
-      clone.removeClass('template-map');
-      $('#maps').append(clone.show())
-    }
-  };
+        </section>
+        <section id="about">
+          <div class="page-header">
+            <h1>About</h1>
+          </div>
+          <p class="lead">About the project</p>
+          <p>This project is tracking Quake Live duel matches for players and ranking each player on the Glicko 2 scale. Fetching of a player is done once a week and ranking also updates once a week since each week is regarded as a "tournament". Note that this removes smaller fluctuations in ranking over time since the player is smoothed.</p>
+        </section>
+        <section id="faq">
+          <div class="page-header">
+            <h1>FAQ</h1>
+          </div>
+          <dl>
+            <dt>How is the ranking done</dt>
+            <dd>Matches you play are eventually scanned by the crawler. It is pretty slow since it does not want to overload the QL site. When the matches have been crawled, all matches less than a minute is filtered out. The reason is that we are trying to guage skill levels of players and not even trying doesn't count. Then the matches are entered into the Glicko 2 ranking system for updating the <em>Rank</em> and the <em>Rank Deviation</em>. The first number is the current skill level and the second tracks the confidence in that skill level by the system. We box-plot the latter so a player may have some idea of where he or she are, ranking-wise.</dd>
+            <dt>Isn't the boxplots the wrong plot to use for the ranking?</dt>
+            <dd>Correct</dd>
+            <dt>My question is not answered!</dt>
+            <dd>Oh, the horror! If you feel it is a good question, contact me</dd>
+          </dl>
+        </section>
+        <section id="contact">
+          <div class="page-header">
+            <h1>Contact</h1>
+          </div>
+          <p>Code is written by Jesper Louis Andersen: jesper.louis.andersen@gmail.com</p>
+        </section>
+    </div> <!-- /container -->
 
-  add_player = function(player, data) {
-    $.each(data, function(map, values) {
-      create(map);
-      
-      var clone = $('.template-player').clone();
-      clone.removeClass('template-player');
-      clone.attr('id', player + '-' + map);
-      clone.find('.name').text(player);
-      clone.find('.rank').text(values['rank']);
-      var r = values['rank'];
-      var rd = values['rank_deviation'];
-      $('#' + map).find('.players').append(clone.show());
-      clone.find('.sparkline').sparkline([0, r - 2*rd, r - rd, r, r + rd, r + 2*rd, 3000],
-        { type: 'box', raw: true, width: '140px' } );
-      clone.find('.streak').sparkline(values['streak'],
-        { type: 'tristate' } );
-      
-    });
-  };
-  
-  $(document).ready(function() {
-    $('#add').click(function() {
-      var player = $('#player_to_add')[0].value;
-      $.getJSON('/player/' + player, function(data) {
-        add_player(player, data);
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.sparkline.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/qlglicko.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('#player-form').submit(function() {
+    	    var p = $('#player_to_add')[0].value;
+    	    get_and_add_player(p);
+    	    false
+        });
       });
-    });
-  });
-</script>
-</body>
+    </script>
+  </body>
 </html>

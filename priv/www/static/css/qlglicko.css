@@ -1,0 +1,19 @@
+thead {
+	color: #000;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+	padding: 9px 24px;
+	background-color: #f8f8f8;
+}
+
+caption {
+	color: #000;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: left;
+}
+
+table {
+	border: 1px
+}
