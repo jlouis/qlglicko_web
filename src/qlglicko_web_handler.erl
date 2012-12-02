@@ -38,19 +38,22 @@ format_entries(Rank, Streak) ->
   Streaks = format_streaks(Streak),
   format_rank(Rank, Streaks).
 
-format_rank([], _Streaks) -> [];
-format_rank([{Map, R, RD} | Next], Streaks) ->
-  
-  Matches = proplists:get_value(Map, Streaks, []),
-  [{Map, [{<<"rank">>, round(R)},
-               {<<"rank_deviation">>, round(RD)},
-               {<<"streak">>, Matches}]} | format_rank(Next, Streaks)].
+format_rank(Entries, Streaks) ->
+  R = sofs:relation([{Map, {T, R, RD}} || {T, Map, R, RD} <- Entries]),
+  F = sofs:relation_to_family(R),
+  [{Map, [
+  	{<<"rank">>, order_ranks(Tourneys)},
+  	{<<"streak">>, proplists:get_value(Map, Streaks, [])}]} || {Map, Tourneys} <- sofs:to_external(F)].
 
 format_streaks(Ss) ->
   R = sofs:relation([{Map, {Res, Played}} || {Map, Res, Played} <- Ss]),
   F = sofs:relation_to_family(R),
   [{Map, order_streaks(Matches)} || {Map, Matches} <- sofs:to_external(F)].
   
+order_ranks(Tourneys) ->
+  [ [{<<"rank">>, R},
+     {<<"rank_deviation">>, RD}] || {_, R, RD} <- lists:keysort(1, Tourneys) ].
+
 order_streaks(Matches) ->
   [F || {F, _} <- lists:reverse(lists:keysort(2, Matches)) ].
   

@@ -16,14 +16,18 @@ add_player = function(player, data) {
     clone.removeClass('template-player');
     clone.attr('id', player + '-' + map);
     clone.find('.name').text(player);
-    clone.find('.rank').text(values['rank']);
-    var r = values['rank'];
-    var rd = values['rank_deviation'];
+    var ranks = values['rank'];
+    var r = ranks[ranks.length - 1]['rank'];
+    var rd = ranks[ranks.length - 1]['rank_deviation'];
+    clone.find('.rank').text(r);
     $('#' + map).find('.players').append(clone.fadeIn());
     clone.find('.sparkline').sparkline([0, r - 2*rd, r - rd, r, r + rd, r + 2*rd, 3000],
       { type: 'box', raw: true, width: '140px' } );
     clone.find('.streak').sparkline(values['streak'],
       { type: 'tristate' } );
+    var devel = jQuery.map(ranks, function(o) { return o['rank'] });
+    console.log(devel);
+    clone.find('.development').sparkline(devel, {type: 'line' });
     
   });
 };
