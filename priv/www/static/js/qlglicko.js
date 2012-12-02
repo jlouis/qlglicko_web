@@ -4,6 +4,7 @@ create = function(map) {
     clone.find('.map-header').text(map);
     clone.attr('id', map);
     clone.removeClass('template-map');
+    clone.addClass('map-entry');
     $('#maps').append(clone.show())
   }
 };
@@ -17,8 +18,8 @@ add_player = function(player, data) {
     clone.attr('id', player + '-' + map);
     clone.find('.name').text(player);
     var ranks = values['rank'];
-    var r = ranks[ranks.length - 1]['rank'];
-    var rd = ranks[ranks.length - 1]['rank_deviation'];
+    var r = Math.round(ranks[ranks.length - 1]['rank']);
+    var rd = Math.round(ranks[ranks.length - 1]['rank_deviation']);
     clone.find('.rank').text(r);
     $('#' + map).find('.players').append(clone.fadeIn());
     clone.find('.sparkline').sparkline([0, r - 2*rd, r - rd, r, r + rd, r + 2*rd, 3000],
@@ -26,7 +27,6 @@ add_player = function(player, data) {
     clone.find('.streak').sparkline(values['streak'],
       { type: 'tristate' } );
     var devel = jQuery.map(ranks, function(o) { return o['rank'] });
-    console.log(devel);
     clone.find('.development').sparkline(devel, {type: 'line' });
     
   });
