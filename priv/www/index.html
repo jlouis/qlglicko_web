@@ -44,7 +44,7 @@
           <div class="page-header">
             <h1>Rank Players</h1>
           </div>
-          <p>Currently, the player ranker is <em>very</em> strict about what it gets. In particular, you need to supply correct capital letters in the right spots to make the system guess at what you typed.</p>
+          <p>Currently, the player ranker is rather strict at what it accepts. You can ignore capitalization, but beware of players using characters that look like other characters, like the 1 (one) in "k1llsen" for instance.</p>
 
 <form id="player-form" style="display:none">
       <fieldset>
@@ -132,9 +132,13 @@
              event.preventDefault();
     	    var p = $('#player_to_add')[0].value;
     	    get_and_add_player(p);
+    	    var txt = $('#player_to_add');
+    	    txt.focus();
+    	    txt.select();
     	    false;
         });
         $('#player-form').show();
+        $('#player_to_add').focus();
         
       });
     </script>
