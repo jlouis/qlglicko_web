@@ -21,7 +21,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Project name</a>
+          <a class="brand" href="#">QLGlicko</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
@@ -36,7 +36,7 @@
     </div>
     <div class="container">
 
-      <h1>QLGlicko 2 ranking stats</h1>
+      <h1>Quake Live Glicko 2 ranking stats</h1>
       <p class="lead">Look up rankings of players on different maps and see how well they are performing.</p>
 	<!-- Download
           ================================================== -->
@@ -83,7 +83,8 @@
             <h1>About</h1>
           </div>
           <p class="lead">About the project</p>
-          <p>This project is tracking Quake Live duel matches for players and ranking each player on the Glicko 2 scale. Fetching of a player is done once a week and ranking also updates once a week since each week is regarded as a "tournament". Note that this removes smaller fluctuations in ranking over time since the player is smoothed.</p>
+          <p>This project is tracking Quake Live duel matches for players and ranking each player on the Glicko 2 scale. Fetching of a player is done once a week and ranking also updates once a week since each week is regarded as a "tournament". Note that this removes smaller fluctuations in ranking over time since the player is smoothed with more matches.</p>
+          <p>The strength of this system is that it should predict better than ELO when evaluating the power of a player. Also, a difference is we are ranking players individually on maps to account for the fact that some players are better on certain maps than others.</p>
         </section>
         <section id="faq">
           <div class="page-header">
@@ -105,11 +106,17 @@
             <dt>Your page looks like crap!</dt>
             <dd>I am sorry. You should be able to present a nicer layout yourself, so grab your text editor and then get to hacking the layout and look of the site. This is just to get up and running quickly.</dd>
             <dt>What is the affiliation to the QLRanks site?</dt>
-            <dd>We are not connected in any way. I respect the work done by QLRanks which is awesome. Their match data is more online which means they have results faster and they know a lot more about what is happening <em>right now</em> on Quake Live. QLGlicko is more interested in long-term rankings of players and as such uses a more advanced and computationally intensive algorithm. QLGlicko is always lagging behind current performance by some margin. Usually about 1 to 1.5 weeks.</dd>
+            <dd>We are not connected in any way. I respect the work done by QLRanks which is awesome. Their match data is more online which means they have results faster and they know a lot more about what is happening <em>right now</em> on Quake Live. QLGlicko is more interested in long-term rankings of players and as such uses a more advanced and computationally intensive algorithm. QLGlicko is always lagging behind current performance by some margin. Usually about 1 to 1.5 weeks. Another point is we rank per map, whereas QLRanks is ranking players with an overall score.</dd>
             <dt>Can't you rank TDM or CTF also?</dt>
             <dd>Glicko 2 is explicitly a 1v1 ranking system. It is not possible to adopt it to a multiplayer situation. We would need to employ a different ranking system.</dd>
             <dt>How about CA then?</dt>
             <dd>CA is not a competitive mode, so go to hell. Only mad frenchmen like H3artless plays it. More seriously though, the problem with CA is the same as with TDM and CTF. We need another ranking system for those.</dd>
+            <dt>HoN, LoL or DOTA 2?</dt>
+            <dd>DOTA 2 of course! The other games are boring to watch</dd>
+            <dt>SC2, WoW or D3?</dt>
+            <dd>D2, naturally</dd>
+            <dt>What do you feel about Shootmania?</dt>
+            <dd>Like everyone else I fall asleep when I watch it. I'd much rather hack code on this site than looking at Shootmania.
             <dt>My question is not answered!</dt>
             <dd>Oh, the horror! If you feel it is a good question, contact me</dd>
           </dl>
