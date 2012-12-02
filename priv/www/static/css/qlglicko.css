@@ -1,28 +1,52 @@
-thead {
-	color: #000;
-	font-size: 12px;
-	font-weight: bold;
-	line-height: 18px;
-	padding: 9px 24px;
-	background-color: #eeeeee;
+table,td,th{
+	border:none;
+	border-collapse:collapse;
+	margin:0;
+	padding:0;
 }
 
-caption {
-	color: #000;
-	font-size: 18px;
-	font-weight: bold;
-	text-align: left;
+td,th{
+	padding: .2em .5em;
+	vertical-align:top;
+	font-weight:normal;
+}
+thead th{
+	font-weight:bold;
+	font-size:90%;
+	vertical-align:bottom;
+	border-bottom:1px solid #000;
+	margin-bottom:5px;
+}
+tbody th,td{
+	border-right:1px solid #000;
 }
 
-td {
-	padding: 2px;
+tbody td,tbody th{
+	padding:2px 10px;
 }
-
-table {
-	border: 1px;
-	padding: 3px;
+tbody th{
+	border-left:1px solid #000;
 }
-
-.map-entry {
-	padding: 10px;
+tfoot td,tfoot th{
+	margin-top:5px;
+	border:none;
+	border-top:1px solid #000;
+}
+caption{
+	text-align:left;
+	font-size:120%;
+	font-weight:bold;
+	margin:5px;
+}
+table a:link{
+	color:#363;
+}
+table a:visited{
+	color:#696;
+}
+table a:hover{
+	text-decoration:none;
+}
+table a:active{
+	color:#000;
 }
