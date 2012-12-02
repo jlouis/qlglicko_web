@@ -19,7 +19,7 @@ add_player = function(player, data) {
     clone.find('.rank').text(values['rank']);
     var r = values['rank'];
     var rd = values['rank_deviation'];
-    $('#' + map).find('.players').append(clone.show());
+    $('#' + map).find('.players').append(clone.fadeIn());
     clone.find('.sparkline').sparkline([0, r - 2*rd, r - rd, r, r + rd, r + 2*rd, 3000],
       { type: 'box', raw: true, width: '140px' } );
     clone.find('.streak').sparkline(values['streak'],
