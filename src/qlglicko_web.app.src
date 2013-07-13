@@ -10,6 +10,7 @@
                   crypto, ranch, cowboy,
                   qlglicko_core
                  ]},
+  {modules, []},                 
   {mod, { qlglicko_web_app, []}},
   {env, []}
  ]}.
