@@ -20,13 +20,16 @@ handle(InReq, State) ->
 
 handle_player(invalid, Req, State) ->
     {ok, Req2} = cowboy_req:reply(404, [], <<"Player not found">>, Req),
-    {ok, Req2, State};
+    {ok, age(Req2), State};
 handle_player({valid, Player}, Req, State) ->
-    {ok, Entries} = qlg_pgsql_srv:player_rank(Player),
-    {ok, Streaks} = qlg_pgsql_srv:player_match_streak(Player),
-
-    {ok, Req2} = cowboy_req:reply(200, [], jsx:to_json(format_entries(Entries, Streaks), [space, {indent, 2}]), Req),
-    {ok, Req2, State}.
+    {ok, Data} = qlg_db:player_stats(Player),
+    {ok, Req2} = cowboy_req:reply(200, [],
+                                  jsx:to_json(format_entries(
+                                                proplists:get_value(entries, Data),
+                                                proplists:get_value(streaks, Data)),
+                                              [space, {indent, 2}]),
+                                  Req),
+    {ok, age(Req2), State}.
 
 terminate(_Req, _State) ->
     ok.
@@ -62,3 +65,6 @@ validate_player(P) ->
     nomatch -> invalid;
     match -> {valid, P}
   end.
+
+age(Req) ->
+    cowboy_req:set_resp_header(<<"Cache-Control">>, <<"max-age=28800">>, Req).
