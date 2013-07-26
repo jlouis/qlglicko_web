@@ -8,6 +8,7 @@
                   stdlib,
                   lager,
                   crypto, ranch, cowboy,
+                  mimetypes,
                   qlglicko_core
                  ]},
   {modules, []},                 

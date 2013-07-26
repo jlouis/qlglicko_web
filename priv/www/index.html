@@ -28,6 +28,7 @@
               <li><a href="#rank-players">Rank Players</a></li>
               <li><a href="#about">About</a></li>
               <li><a href="#faq">FAQ</a></li>
+              <li><a href="#api">Api</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
           </div><!--/.nav-collapse -->
@@ -135,6 +136,34 @@
             <dd>Oh, the horror! If you feel it is a good question, contact me</dd>
           </dl>
         </section>
+        <section id="api">
+          <div class="page-header">
+            <h1>Api</h1>
+          </div>
+          <p>This page is driven by a REST Api built the traditional
+          way. If you are cautious, you may use it in an application
+          of your own, but please mind the rate at which you query.
+          While the site can handle a lot, there are limits to how
+          much it can handle.</p>
+          <ul>
+            <li>GET /player/:playername:<pre>
+$ curl http://qlglicko.net/player/rapha
+{
+  "aerowalk": {
+    "rank": [
+      {
+        "rank": 1792.1416553268268,
+        "rank_deviation": 289.25629342270895
+      },
+      {
+        "rank": 1792.1416553268268,
+        "rank_deviation": 289.2563044855622
+      },
+...        
+            </pre></li>
+          </ul>
+        </section>
+
         <section id="contact">
           <div class="page-header">
             <h1>Contact</h1>

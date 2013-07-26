@@ -1,39 +1,43 @@
 -module(qlglicko_web_handler).
--behaviour(cowboy_http_handler).
 
--export([init/3]).
--export([handle/2]).
--export([terminate/2]).
+%% Cowboy REST Callback API
+-export([allowed_methods/2,
+         content_types_provided/2,
+         get_json/2,
+         init/3,
+         terminate/3,
+         validate_player/1]).
 
-init({tcp, http}, Req, _Opts) ->
-    {ok, Req, undefined_state}.
+init({tcp, http}, _Req, _Opts) ->
+    {upgrade, protocol, cowboy_rest}.
 
-handle(InReq, State) ->
-    case cowboy_req:path_info(InReq) of
-      {[P],  Req} when is_binary(P) ->
-        handle_player(validate_player(P), Req, State);
-      Other ->
-        lager:debug("Got: ~p", [Other]),
-        {ok, Req2} = cowboy_req:reply(404, [], <<"Not Found">>, InReq),
-        {ok, Req2, State}
-    end.
+allowed_methods(Req, State) ->
+    {[<<"GET">>], Req, State}.
 
-handle_player(invalid, Req, State) ->
-    {ok, Req2} = cowboy_req:reply(404, [], <<"Player not found">>, Req),
-    {ok, age(Req2), State};
-handle_player({valid, Player}, Req, State) ->
+content_types_provided(Req, State) ->
+    {[{{<<"application">>, <<"json">>, []}, get_json}], Req, State}.
+
+get_json(InReq, State) ->
+    {Player, Req} = cowboy_req:binding(player, InReq),
+    handle_player_json(Player, Req, State).
+
+handle_player_json(Player, Req, State) ->
     {ok, Data} = qlg_db:player_stats(Player),
-    {ok, Req2} = cowboy_req:reply(200, [],
-                                  jsx:to_json(format_entries(
-                                                proplists:get_value(entries, Data),
-                                                proplists:get_value(streaks, Data)),
-                                              [space, {indent, 2}]),
-                                  Req),
-    {ok, age(Req2), State}.
+    {jsx:to_json(format_entries(
+                   proplists:get_value(entries, Data),
+                   proplists:get_value(streaks, Data)),
+                 [space, {indent, 2}]),
+     age(Req), State}.
 
-terminate(_Req, _State) ->
+terminate(_Reason, _Req, _State) ->
     ok.
-    
+
+validate_player(P) ->
+  case re:run(P, <<"^[a-zA-Z0-9_]+$">>, [{capture, none}]) of
+    nomatch -> false;
+    match -> true
+  end.
+
 %% Internal players
 %% -------------------------------
 
@@ -60,11 +64,6 @@ order_ranks(Tourneys) ->
 order_streaks(Matches) ->
   [F || {F, _} <- lists:reverse(lists:keysort(2, Matches)) ].
   
-validate_player(P) ->
-  case re:run(P, <<"^[a-zA-Z0-9_]+$">>, [{capture, none}]) of
-    nomatch -> invalid;
-    match -> {valid, P}
-  end.
-
 age(Req) ->
     cowboy_req:set_resp_header(<<"Cache-Control">>, <<"max-age=28800">>, Req).
+
