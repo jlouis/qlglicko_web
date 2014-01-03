@@ -65,5 +65,6 @@ order_streaks(Matches) ->
   [F || {F, _} <- lists:reverse(lists:keysort(2, Matches)) ].
   
 age(Req) ->
-    cowboy_req:set_resp_header(<<"Cache-Control">>, <<"max-age=28800">>, Req).
+    cowboy_req:set_resp_header(<<"Cache-Control">>,
+                               <<"public, max-age=3600">>, Req).
 

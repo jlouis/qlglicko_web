@@ -105,8 +105,14 @@
             <dd>Data collection started from the 1st of February 2012. I may have missed a couple of early matches around that point in time.</dd>
             <dt>What are the initial configuration values for Glicko 2?</dt>
             <dd>Starting rank r = 1500, the initial rank deviation is 397, the σ value is 0.07 and τ = 0.3. These values have been found by a simulated annealing experiment based on 13 weeks of matches. It is ongoing work to re-rank on 41+ weeks of matches.</dt>
-            <dt>Isn't the boxplots the wrong plot to use for the ranking?</dt>
-            <dd>Correct</dd>
+            <dt>Isn't the barplots the wrong plot to use for the ranking?</dt>
+            <dd>Somewhat. The red line, called the target, is the
+            current rank. The blue line points to the conservative low
+            estimate of the player. Playing more will make the
+            estimate get closer to the target. The background encodes
+            intervals to mark roughly where certain point scores are.
+            From highest to lowest they are 2600, 2400, 2000. The far
+            right is 2600 points.</dd>
             <dt>What is this "Match Streak" thing?</dt>
             <dd>The system looks up the last 150 matches by the player and reports how the player fared on those matches. This means that if a player mostly plays Bloodrun/ZTN, the list will be longer for that map. It gives a great visual overview of what maps the player has played recently.</dd>
             <dt>What tools are used for this site?</dt>
