@@ -3,42 +3,53 @@
   <head>
     <meta charset="utf-8">
     <title>QLGlicko - Quake Live ranking for the masses</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/static/css/qlglicko.css" rel="stylesheet" media="screen">
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    
+    <link href="/static/css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
   </head>
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+    <div id="wrapper">
+    
+      <!-- Sidebar -->
+      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">QLGlicko</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
+          </button>
+          <a class="navbar-brand" href="index.html">QLGlicko</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav side-nav">
+              <li class="active"><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
               <li><a href="#rank-players">Rank Players</a></li>
               <li><a href="#about">About</a></li>
               <li><a href="#faq">FAQ</a></li>
               <li><a href="#api">Api</a></li>
               <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
+    <div id="page-wrapper">
     <div class="container">
-
-      <h1>Quake Live Glicko 2 ranking stats</h1>
-      <p class="lead">Look up rankings of players on different maps and see how well they are performing.</p>
+	<div class="starter-template">
+		<h1>Quake Live Glicko 2 ranking stats</h1>
+		<p class="lead">Look up rankings of players on different maps and see how well they are performing.</p>
+	</div>
 	<!-- Download
           ================================================== -->
         <section id="rank-players">
@@ -47,34 +58,47 @@
           </div>
           <p>Currently, the player ranker is rather strict at what it accepts. You can ignore capitalization, but beware of players using characters that look like other characters, like the 1 (one) in "k1llsen" for instance.</p>
 
-<form id="player-form" style="display:none">
-      <fieldset>
-        <legend>Player Input</legend>
-        <p>
-          <label>Player</label>
-          <input type = "text"
-                 id = "player_to_add"
-                 value = "" /></p>
-          <button class="btn" type = "submit" id = "add">Add</button>
-      </fieldset>
-     </form>
+<div class="row">
+<div class="col-lg-6" >
+<form role="form" id="player-form" style="display:none">
+  <div class="form-group">
+    <label for="player_to_add">Player</label>
+    <input type="text" class="form-control" id="player_to_add" placeholder="rapha">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+</div>
+</div>
+<h1>Maps:</h1>
 <div id="maps">
 </div>
 <div class="template-map" style="display:none">
-<table>
-  <caption class="map-header"></caption>
-  <thead>
-    <tr>
+<div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> <span class="map-header"></span></h3>
+              </div>
+              <div class="panel-body">
+	   <div class="table-responsive">
+              <table class="table table-bordered table-hover tablesorter">
+                <thead>
+                  <tr>
     <td>Player Name</td>
     <td>Rank</td>
     <td>Rank Development</td>
     <td>Summary</td>
     <td>Match Streak</td>
-    </tr>
-  </thead>
-  <tbody class="players">
-  </tbody>
-</table>
+                  </tr>
+                </thead>
+                <tbody class="players">
+                </tbody>
+              </table>
+            </div>
+              </div>
+            </div>
+          </div>
+</div><!-- /.row -->
 </div>
 <table style="display:none">
 <tr class="template-player" style="display:none">
