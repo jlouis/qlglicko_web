@@ -11,15 +11,9 @@
 
 start(_StartType, _StartArgs) ->
     HostMatch = '_',
-    RootMatch   = {"/", cowboy_static,
-                   [{directory, {priv_dir, qlglicko_web, [<<"www">>]}},
-                    {mimetypes, {fun mimetypes:path_to_mimes/2, default}},
-                    {file, <<"index.html">>},
-                    {etag, {attributes, [filepath, filesize, inode, mtime]}}]},
-    StaticMatch = {"/static/[...]", cowboy_static,
-                   [{directory, {priv_dir, qlglicko_web, [<<"www">>, <<"static">>]}},
-                    {mimetypes, {fun mimetypes:path_to_mimes/2, default}},
-                    {etag, {attributes, [filepath, filesize, inode, mtime]}}]},
+    RootMatch   = {"/", cowboy_static, {priv_file, qlglicko_web, "www/index.html"}},
+    StaticMatch = {"/static/[...]", cowboy_static, {priv_dir, qlglicko_web, "www/static",
+                    [{mimetypes, cow_mimetypes, all}]}},
     StatsMatch  = {"/stats/tournament/[:tourney]/[:tournament]",
                    [{tourney, function,
                      fun qlglicko_web_stats:validate_tournament/1},
