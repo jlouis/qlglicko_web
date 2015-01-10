@@ -3,49 +3,51 @@
 %% Cowboy REST Callback API
 -export([allowed_methods/2,
          content_types_provided/2,
-         get_csv/2,
+         get_tsv/2,
          init/3,
-         terminate/3,
-         validate_tournament/1]).
+         rest_init/2,
+         terminate/3]).
+
+-record(state, { query_type }).
 
 init({tcp, http}, _Req, _Opts) ->
     {upgrade, protocol, cowboy_rest}.
+
+rest_init(Req, Opts) ->
+    {ok, Req, state_init(Opts)}.
+    
+state_init([]) -> #state { query_type = undefined };
+state_init([map_count]) -> #state { query_type = map_count }.
 
 allowed_methods(Req, State) ->
     {[<<"GET">>], Req, State}.
 
 content_types_provided(Req, State) ->
-    {[{{<<"text">>, <<"csv">>, []}, get_csv}], Req, State}.
+    {[{{<<"text">>, <<"tab-separated-values">>, []}, get_tsv}], Req, State}.
 
-get_csv(InReq, State) ->
-    {Tourney, Req} = cowboy_req:binding(tourney, InReq),
-    {Tournament, OutReq} = cowboy_req:binding(tournament, Req),
-    handle_stats(Tourney, Tournament, OutReq, State).
-
-handle_stats(T, C, Req, State) ->
-    {ok, Data} = qlg_db:tournament_stats(T, C),
-    {["Player,Map,Rank,Rd,Sigma\n" | csv(Data)], age(Req), State}.
+get_tsv(Req, #state { query_type = map_count } = State) ->
+    Data = qlg_db:duel_counts(),
+    Output = [tsv_header(["Map", "Count"]) | tsv_data(Data)],
+    {Output, age(Req), State}.
 
 terminate(_Reason, _Req, _State) ->
     ok.
 
-validate_tournament(T) ->
-  case re:run(T, <<"^[a-zA-Z0-9_]+$">>, [{capture, none}]) of
-    nomatch -> false;
-    match -> true
-  end.
-
 %% Internal players
 %% -------------------------------
 
-csv([]) -> [];
-csv([{P, M, R, Rd, Sigma} | Results]) ->
-    [P, $,,
-     M, $,,
-     float_to_binary(R), $,,
-     float_to_binary(Rd), $,,
-     float_to_binary(Sigma),
-     "\n" | csv(Results)].
+tsv_header([]) -> $\n;
+tsv_header([E]) -> [E, $\n];
+tsv_header([E|Es]) -> [E, $\t | tsv_header(Es)].
+
+tsv_data([]) -> [];
+tsv_data([T|Ts]) when is_tuple(T) ->
+    Record = [tsv_element(E) || E <- tuple_to_list(T)],
+    [Record, $\n | tsv_data(Ts)].
+    
+tsv_element(B) when is_binary(B) -> B;
+tsv_element(F) when is_float(F) -> float_to_binary(F);
+tsv_element(I) when is_integer(I) -> integer_to_binary(I).
   
 age(Req) ->
     cowboy_req:set_resp_header(<<"Cache-Control">>,
