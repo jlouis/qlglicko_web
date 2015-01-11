@@ -4,11 +4,26 @@
     <meta charset="utf-8">
     <title>QLGlicko - Quake Live ranking for the masses</title>
 </head>
+<style>
+
+.chart rect {
+	fill: steelblue;
+}
+
+.chart text {
+	fill: white;
+	font: 10px sans-serif;
+	text-anchor: end;
+}
+
+</style>
+
 <body>
   <h1>Nothing to see here yet</h1>
   <p>Originally, I had some test code here, but it is becoming more and more apparent it wouldn't really rock in the long run. Hence, everything will be replaced with a new front-end. The work is ongoing, and the following pieces of code lists what is going on.</p>
   <h2>Alpha testing</h2>
   <p>We are currently testing a new number of new features:</p>
-  
+  <svg class="map_count_chart"></svg>
+  <script src="./static/bundle.js"></script>
 </body>
 </html>
