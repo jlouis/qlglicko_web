@@ -3,7 +3,7 @@ var d3 = require('d3');
 console.log('Ready.');
 var map_count = 'http://qlglicko.org/stats/global/map_count';
 
-var width = 420,
+var width = 800,
     barHeight = 20;
 
 var x = d3.scale.linear()
