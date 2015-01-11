@@ -42,9 +42,13 @@ tsv_header([E|Es]) -> [E, $\t | tsv_header(Es)].
 
 tsv_data([]) -> [];
 tsv_data([T|Ts]) when is_tuple(T) ->
-    Record = [tsv_element(E) || E <- tuple_to_list(T)],
+    Record = tsv_record(tuple_to_list(T)),[tsv_element(E) || E <- tuple_to_list(T)],
     [Record, $\n | tsv_data(Ts)].
     
+tsv_record([]) -> [];
+tsv_record([E]) -> [tsv_element(E)];
+tsv_record([E|Es]) -> [tsv_element(E), $\t | tsv_record(Es)].
+
 tsv_element(B) when is_binary(B) -> B;
 tsv_element(F) when is_float(F) -> float_to_binary(F);
 tsv_element(I) when is_integer(I) -> integer_to_binary(I).
