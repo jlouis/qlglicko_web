@@ -34,7 +34,7 @@ d3.tsv(map_count, type, function(error, data) {
 
   chart.append('g')
   	.attr('class', 'x axis')
-  	.attr('transform', 'translate(0,', + height + ')')
+  	.attr('transform', 'translate(0,' + height + ')')
   	.call(xAxis);
 
   chart.append('g')
