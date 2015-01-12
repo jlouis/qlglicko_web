@@ -8,6 +8,7 @@
                   stdlib,
                   lager,
                   crypto, ranch, cowboy,
+                  cowboy_cors,
                   qlglicko_core
                  ]},
   {modules, []},                 
