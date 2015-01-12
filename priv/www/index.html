@@ -6,14 +6,23 @@
 </head>
 <style>
 
-.map_count_chart rect {
+.bar {
 	fill: steelblue;
 }
 
-.map_count_chart text {
-	fill: white;
+.axis text{
 	font: 10px sans-serif;
-	text-anchor: end;
+}
+
+.axis path
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
+.x.axis.path {
+	display: none;
 }
 
 </style>
@@ -23,7 +32,7 @@
   <p>Originally, I had some test code here, but it is becoming more and more apparent it wouldn't really rock in the long run. Hence, everything will be replaced with a new front-end. The work is ongoing, and the following pieces of code lists what is going on.</p>
   <h2>Alpha testing</h2>
   <p>We are currently testing a new number of new features:</p>
-  <svg class="map_count_chart"></svg>
+  <svg class="chart"></svg>
   <script src="./static/bundle.js"></script>
 </body>
 </html>
