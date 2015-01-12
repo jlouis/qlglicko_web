@@ -29,7 +29,7 @@ var chart = d3.select('.chart')
 
 d3.tsv(map_count, type, function(error, data) {
   x.domain(data.map(function(d) { return d.Map; }));
-  y.domain([0, d3.max(data, function(d) { return d.Count; })]);
+  y.domain([0, d3.max(data, function(d) { return (d.Count / 1000); })]);
 
 
   chart.append('g')
@@ -47,7 +47,7 @@ d3.tsv(map_count, type, function(error, data) {
       .attr('class', 'bar')
       .attr('x', function(d) { return x(d.Map); })
       .attr('y', function(d) { return y(d.Count); })
-      .attr('height', function(d) { return height - y(d.value); })
+      .attr('height', function(d) { return height - y(d.Count / 1000); })
       .attr('width', x.rangeBand());
 });
 

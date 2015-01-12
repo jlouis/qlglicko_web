@@ -30,7 +30,9 @@ start(_StartType, _StartArgs) ->
                                                    PlayerMatch]}]),
     cowboy:start_http(qlglicko_http_listener, 100,
                       [{port, 8080}],
-                      [{env, [{dispatch, Dispatch}]}]),
+                      [{env, [
+                          {cors_policy, qlglicko_cors_policy},
+                          {dispatch, Dispatch}]}]),
     qlglicko_web_sup:start_link().
 
 stop(_State) ->
