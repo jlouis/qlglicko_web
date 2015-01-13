@@ -16,7 +16,7 @@ record([E]) -> [element(E)];
 record([E|Es]) -> [element(E), $\t | record(Es)].
 
 element(B) when is_binary(B) -> B;
-element(F) when is_float(F) -> float_to_binary(F);
+element(F) when is_float(F) -> float_to_binary(F, [{decimals, 4}]);
 element(I) when is_integer(I) -> integer_to_binary(I);
 element({Year, Month, Day}) when is_integer(Year), is_integer(Month), is_integer(Day) ->
     [integer_to_binary(Year), $-, integer_to_binary(Month), $-, integer_to_binary(Day)].
