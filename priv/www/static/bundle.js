@@ -28,6 +28,9 @@ var chart = d3.select('.chart')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 d3.tsv(map_count, type, function(error, data) {
+  // Only pick those maps which are of a certain popularity
+  data = data.filter(function(d) { return (d.Count > 25000) });
+
   x.domain(data.map(function(d) { return d.Map; }));
   y.domain([0, d3.max(data, function(d) { return (d.Count / 1000); })]);
 
