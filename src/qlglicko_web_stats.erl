@@ -47,8 +47,8 @@ rest_init(Req, []) ->
 rest_init(Req, [map_count]) ->
     {ok, Req, #state { q = map_count }};
 rest_init(Req, [rank]) ->
-    {Player, Req2} = cowboy_req:binding(<<"player">>, Req),
-    {Map, Req3} = cowboy_req:binding(<<"map">>, Req2),
+    {Player, Req2} = cowboy_req:binding(player, Req),
+    {Map, Req3} = cowboy_req:binding(map, Req2),
     {ok, Req3, #state { q = {rank, Player, Map} }}.
 
 allowed_methods(Req, State) ->
