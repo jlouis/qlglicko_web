@@ -3,33 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>QLGlicko - Quake Live ranking for the masses</title>
+    <link rel="stylesheet" type="text/css" href="./static/qlglicko.css">
 </head>
-<style>
-
-.bar {
-  fill: steelblue;
-}
-
-.bar:hover {
-  fill: brown;
-}
-
-.axis {
-  font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.x.axis path {
-  display: none;
-}
-
-</style>
 
 <body>
   <h1>Nothing to see here yet</h1>
@@ -38,9 +13,30 @@
   <p>We are currently testing a new number of new features:</p>
   <div class="map count">
     <p>The following graph shows the current count of played matches in the database, visualized through the d3.js library. It pulls data asynchronously from the underlying system, and serves as a tool for showing how to implement these things in more detail for individual users later on.</p>
-    <p>Do note we only show maps which have been played at least 20000 times. Maps with fewer duels are removed from the pool at the moment.</p>
+    <p>Do note we only show maps which have been played at least 15000 times. Maps with fewer duels are removed from the pool at the moment.</p>
     <svg class="chart"></svg>
     <script src="./static/bundle.js"></script>
   </div>
+  <p>Here is the current status for the player Rapha on the map Aerowalk: <span id="spark_rapha_aerowalk"></span>and as you can see, these are in-line images which can placed in text. Aerowalk is not the strongest map from Rapha, where some would argue that it is Lost World: <span id="spark_rapha_lostworld"></span>.</p>
+  <p>Rapha's main opponent back in the day was Cooller, here on Lost world as well: <span id="spark_cooller_lostworld"></span>.</p>
 </body>
+<script>
+  sparkline = d3.sparkline();
+
+  d3.tsv('http://qlglicko.org/stats/rank/rapha/aerowalk', function(error, data) {
+    console.log('got data');
+    sparkline('#spark_rapha_aerowalk', data);
+  });
+  
+  d3.tsv('http://qlglicko.org/stats/rank/rapha/lostworld', function(error, data) {
+    console.log('got data');
+    sparkline('#spark_rapha_lostworld', data);
+  });
+
+  d3.tsv('http://qlglicko.org/stats/rank/cooller/lostworld', function(error, data) {
+    console.log('got data');
+    sparkline('#spark_cooller_lostworld', data);
+  });
+ 
+</script>
 </html>

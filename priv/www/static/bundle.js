@@ -1,9 +1,302 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var d3 = require('d3');
 
+(function() {
+
+d3.sparkline =  function() {
+  var width = 100;
+  var height = 25;
+
+  var x = d3.scale.linear().range([0, width - 2]);
+  var y = d3.scale.linear().range([height - 4, 0]);
+
+  var format = d3.time.format('%Y-%-m-%-d');
+  var line = d3.svg.line()
+    .interpolate('basis')
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.rank); });
+
+  function sparkline(elemID, data) {
+    data.forEach(function(d) {
+        d.date = format.parse(d.Date);
+        d.rank = +d.Rank;
+    });
+
+    console.log(data.rank);
+
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain(d3.extent(data, function(d) { return d.rank; }));
+
+    var svg = d3.select(elemID)
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', 'translate(0, 2)');
+
+    svg.append('path')
+      .datum(data)
+      .attr('class', 'sparkline')
+      .attr('d', line);
+
+    svg.append('circle')
+      .attr('class', 'sparkcircle')
+      .attr('cx', x(data[0].date))
+      .attr('cy', y(data[0].rank))
+      .attr('r', 1.5);
+
+  console.log(data[0].date);
+  };
+
+  return sparkline;
+
+};
+
+d3.bullet = function() {
+    var orient = 'left',
+        reverse = false,
+        duration = 0,
+        ranges = bulletRanges,
+        markers = bulletMarkers,
+        measures = bulletMeasures,
+
+		width = 380,
+		height = 30,
+		tickFormat = null;
+
+    function bullet(g) {
+      g.each(function(d, i) {
+        var rangez = ranges.call(this, d, i).slice().sort(d3.descending),
+            markerz = ranges.call(this, d, i).slice().sort(d3.descending),
+            measurez = ranges.call(this, d, i).slice().sort(d3.descending),
+            g = d3.select(this);
+
+        // Compute the new x scale
+        var x1 = d3.scale.linear()
+          .domain([0, Math.max(rangez[0], markerz[0], measurez[0])])
+          .range(reverse ? [width, 0] : [0, width]);
+
+        // Retrieve old x-scale if this is an update
+        var x0 = this.__chart__ || d3.scale.linear()
+          .domain([0, Infinity])
+          .range(x1.range());
+
+        // Stash the new scale
+        this.__chart__ = x1;
+
+        // Derive width-scales from x scales
+        var w0 = bulletWidth(x0),
+            w1 = bulletWidth(x1);
+
+        // Update the range rects
+        var range = g.selectAll('rect.range')
+          .data(rangez);
+
+        range.enter().append('rect')
+            .attr('class', function(d, i) { return 'range s' + i; })
+            .attr('width', w0)
+            .attr('height', height)
+            .attr('x', reverse ? x0 : 0)
+          .transition()
+            .duration(duration)
+            .attr('width', w1)
+            .attr('x', reverse ? x1 : 0);
+
+        range.transition()
+          .duration(duration)
+          .attr('x', reverse ? x1 : 0)
+          .attr('width', w1)
+          .attr('height', height);
+
+        // Update measure rects
+        var measure = g.selectAll('rect.measure')
+          .data(measurez);
+
+        measure.enter().append('rect')
+            .attr('class', function(d, i) { return 'measure s' + i; })
+            .attr('width', w0)
+            .attr('height', height / 3)
+            .attr('x', reverse ? x0 : 0)
+            .attr('y', height / 3)
+          .transition()
+            .duration(duration)
+            .attr('width', w1)
+            .attr('x', reverse ? x1 : 0);
+
+        measure.transition()
+          .duration(duration)
+          .attr('width', w1)
+          .attr('height', height / 3)
+          .attr('x', reverse ? x1 : 0)
+          .attr('y', height / 3);
+
+        // Update the marker lines
+        var marker = d3.selectAll('line.marker')
+          .data(markerz);
+
+        marker.enter().append('line')
+            .attr('class', 'marker')
+            .attr('x1', x0)
+            .attr('x2', x0)
+            .attr('y1', height / 6)
+            .attr('y2', height * 5 / 6)
+          .transition()
+            .duration(duration)
+            .attr('x1', x1)
+            .attr('x2', x1);
+
+        marker.transition()
+            .duration(duration)
+            .attr('x1', x1)
+            .attr('x2', x1)
+            .attr('y1', height / 6)
+            .attr('y2', height * 5 / 6);
+
+        // Compute the tick format
+        var format = tickFormat || x1.tickFormat(8);
+
+        // Update the tick groups
+        var tick = d3.selectAll('g.tick')
+          .data(x1.ticks(8), function(d) {
+            return this.textContent || format(d);
+          });
+
+
+        // Initialize ticks
+        var tickEnter = tick.enter().append('g')
+          .attr('class', 'tick')
+          .attr('transform', bulletTranslate(x0))
+          .style('opacity', 1e-6);
+
+
+        tickEnter.append('line')
+          .attr('y1', height)
+          .attr('y2', height * 7 / 6);
+
+        tickEnter.append('text')
+          .attr('text-anchor', 'middle')
+          .attr('dy', '1em')
+          .attr('y', height * 7 / 6)
+          .text(format);
+
+        // Transition for ticks to the new scale
+        tickEnter.transition()
+          .duration(duration)
+          .attr('transform', bulletTranslate(x1))
+          .attr('opacity', 1);
+
+        var tickUpdate = tick.transition()
+          .duration(duration)
+          .attr('transform', bulletTranslate(x1))
+          .style('opacity', 1);
+
+        tickUpdate.select('line')
+          .attr('y1', height)
+          .attr('y2', height * 7 / 6);
+
+        tickUpdate.select('text')
+          .attr('y', height * 7 / 6);
+
+        // Transition the exiting ticks
+        tick.exit().transition()
+          .duration(duration)
+          .attr('transform', bulletTranslate(x1))
+          .style('opacity', 1e-6)
+          .remove();
+
+      });
+      d3.timer.flush();
+    }
+
+    // left, right, top, bottom
+    bullet.orient = function(x) {
+        if (!arguments.length) return orient;
+        orient = x;
+        reverse = orient == 'right' || orient == 'bottom';
+        return bullet;
+     };
+
+    // ranges (bad, satisfactory, good)
+    bullet.ranges = function(x) {
+        if (!arguments.length) return ranges;
+        ranges = x;
+        return bullet;
+    };
+
+   // markers (previous, goal)
+   bullet.markers = function(x) {
+       if (!arguments.length) return markers;
+       markers = x;
+       return bullet;
+   };
+
+   // measures (actual, forecast)
+   bullet.measures = function(x) {
+       if (!arguments.length) return measures;
+        measures = x;
+        return bullet;
+   };
+
+   bullet.width = function(x) {
+       if (!arguments.length) return width;
+       width = x;
+       return bullet;
+   };
+
+   bullet.height = function(x) {
+       if (!arguments.length) return height;
+       height = x;
+       return bullet;
+   };
+
+   bullet.tickFormat = function(x) {
+       if (!arguments.length) return tickFormat;
+       tickFormat = x;
+       return bullet;
+   };
+
+   bullet.duration = function(x) {
+       if (!arguments.length) return duration;
+       duration = x;
+       return bullet;
+   };
+
+   return bullet;
+};
+
+function bulletRanges(d) {
+    return d.ranges;
+}
+
+function bulletMarkers(d) {
+    return d.markers;
+}
+
+function bulletMeasures(d) {
+    return d.measures;
+}
+
+function bulletTranslate(x) {
+    return function(d) {
+        return 'translate(' + x(d) + ',0)';
+    };
+}
+
+function bulletWidth(x) {
+    var x0 = x(0);
+    return function(d) {
+        return Math.abs(x(d) - x0);
+    };
+}
+
+})();
+
+},{"d3":3}],2:[function(require,module,exports){
+var d3 = require('d3');
+
 var map_count = 'http://qlglicko.org/stats/global/map_count';
 
-var margin = {top: 20, right: 30, bottom: 100, left: 40},
+var margin = {top: 20, right: 30, bottom: 150, left: 40},
     width = 960 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
@@ -29,7 +322,7 @@ var chart = d3.select('.chart')
 
 d3.tsv(map_count, type, function(error, data) {
   // Only pick those maps which are of a certain popularity
-  data = data.filter(function(d) { return (d.Count > 20000) });
+  data = data.filter(function(d) { return (d.Count > 15000) });
 
   x.domain(data.map(function(d) { return d.Map; }));
   y.domain([0, d3.max(data, function(d) { return (d.Count / 1000); })]);
@@ -39,23 +332,23 @@ d3.tsv(map_count, type, function(error, data) {
   	.attr('class', 'x axis')
   	.attr('transform', 'translate(0,' + height + ')')
   	.call(xAxis)
-    .selectAll("text")  
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", function(d) {
-            return "rotate(-65)" 
+    .selectAll('text')
+        .style('text-anchor', 'end')
+        .attr('dx', '-.8em')
+        .attr('dy', '.15em')
+        .attr('transform', function(d) {
+            return 'rotate(-65)';
         });
 
   chart.append('g')
     .attr('class', 'y axis')
     .call(yAxis)
-   .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Kilomatches");
+   .append('text')
+    .attr('transform', 'rotate(-90)')
+    .attr('y', 6)
+    .attr('dy', '.71em')
+    .style('text-anchor', 'end')
+    .text('Kilomatches');
 
   chart.selectAll('.bar')
       .data(data)
@@ -72,7 +365,10 @@ function type(d) {
   return d;
 }
 
-},{"d3":2}],2:[function(require,module,exports){
+
+
+
+},{"d3":3}],3:[function(require,module,exports){
 !function() {
   var d3 = {
     version: "3.5.3"
@@ -9539,4 +9835,4 @@ function type(d) {
   if (typeof define === "function" && define.amd) define(d3); else if (typeof module === "object" && module.exports) module.exports = d3;
   this.d3 = d3;
 }();
-},{}]},{},[1]);
+},{}]},{},[2,1]);
