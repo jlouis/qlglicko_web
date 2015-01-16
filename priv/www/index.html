@@ -95,7 +95,7 @@
           d.markers = [d.Rank - (2 * d.RD)];
         });
         
-        svg.data(data);
+        svg.data(data).call(chart.duration(1000));
       });
     });
           
