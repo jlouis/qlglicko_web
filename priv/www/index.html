@@ -22,7 +22,9 @@
   <p>Here is the current status for the player Rapha on the map Aerowalk: <span id="spark_rapha_aerowalk"></span>and as you can see, these are in-line images which can placed in text. Aerowalk is not the strongest map from Rapha, where some would argue that it is Lost World: <span id="spark_rapha_lostworld"></span>.</p>
   <p>Rapha's main opponent back in the day was Cooller, here on Lost world as well: <span id="spark_cooller_lostworld"></span>.</p>
   <h2>Testing for bullet charts</h2>
-  <button>Cooller</button>
+  <button id="cooller_button">Cooller</button>
+  <button id="rapha_button">Rapha</button>
+  <button id="evil_button">Evil</button>
   <div class="bchart"></div>
 </body>
 <script>
@@ -51,16 +53,18 @@
     .width(width)
     .height(height);
     
-  d3.tsv("http://qlglicko.org/stats/rank/rapha", function(error, data) {
-    console.log(data);
-
+  interpret = function(data) {
     data.forEach(function(d) {
-      d.title = d.Player;
-      d.subtitle = d.Map;
+      d.title = d.Map;
+      d.subtitle = '-';
       d.ranges = [1200, 1800, 2400];
       d.measures = [d.Rank - d.RD, d.Rank];
       d.markers = [d.Rank - (2 * d.RD)];
     });
+  };
+
+  d3.tsv("http://qlglicko.org/stats/rank/rapha", function(error, data) {
+    interpret(data);
 
     var svg = d3.select(".bchart").selectAll("svg")
         .data(data)
@@ -85,16 +89,21 @@
       .attr('dy', "1em")
       .text(function (d) { return d.subtitle; });
       
-    d3.selectAll("button").on('click', function() {
+    d3.selectAll("#cooller_button").on('click', function() {
       d3.tsv("http://qlglicko.org/stats/rank/cooller", function(error, data) {
-        data.forEach(function(d) {
-          d.title = d.Player;
-          d.subtitle = d.Map;
-          d.ranges = [1200, 1800, 2400];
-          d.measures = [d.Rank - d.RD, d.Rank];
-          d.markers = [d.Rank - (2 * d.RD)];
-        });
-        
+        interpret(data);
+        svg.data(data).call(chart.duration(1000));
+      });
+    });
+    d3.selectAll("#rapha_button").on('click', function() {
+      d3.tsv("http://qlglicko.org/stats/rank/rapha", function(error, data) {
+        interpret(data);
+        svg.data(data).call(chart.duration(1000));
+      });
+    });
+    d3.selectAll("#evil_button").on('click', function() {
+      d3.tsv("http://qlglicko.org/stats/rank/evil", function(error, data) {
+        interpret(data);
         svg.data(data).call(chart.duration(1000));
       });
     });
