@@ -51,10 +51,12 @@
     .height(height);
     
   d3.tsv("http://qlglicko.org/stats/rank/rapha", function(error, data) {
+    console.log(data);
+
     data.forEach(function(d) {
       d.title = d.Player;
       d.subtitle = d.Map;
-      d.ranges = [1200, 1500, 1800];
+      d.ranges = [1200, 1800, 2400];
       d.measures = [d.Rank - d.RD, d.Rank];
       d.markers = [d.Rank - (2 * d.RD)];
     });
