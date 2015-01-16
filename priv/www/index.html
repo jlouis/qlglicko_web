@@ -9,16 +9,20 @@
 <body>
   <h1>Nothing to see here yet</h1>
   <p>Originally, I had some test code here, but it is becoming more and more apparent it wouldn't really rock in the long run. Hence, everything will be replaced with a new front-end. The work is ongoing, and the following pieces of code lists what is going on.</p>
-  <h2>Alpha testing</h2>
+  <h1>Alpha testing</h1>
   <p>We are currently testing a new number of new features:</p>
+  <h2>Counting duels on different maps</h2>
   <div class="map count">
     <p>The following graph shows the current count of played matches in the database, visualized through the d3.js library. It pulls data asynchronously from the underlying system, and serves as a tool for showing how to implement these things in more detail for individual users later on.</p>
     <p>Do note we only show maps which have been played at least 15000 times. Maps with fewer duels are removed from the pool at the moment.</p>
     <svg class="chart"></svg>
     <script src="./static/bundle.js"></script>
   </div>
+  <h2>Showing sparklines of players</h2>
   <p>Here is the current status for the player Rapha on the map Aerowalk: <span id="spark_rapha_aerowalk"></span>and as you can see, these are in-line images which can placed in text. Aerowalk is not the strongest map from Rapha, where some would argue that it is Lost World: <span id="spark_rapha_lostworld"></span>.</p>
   <p>Rapha's main opponent back in the day was Cooller, here on Lost world as well: <span id="spark_cooller_lostworld"></span>.</p>
+  <h2>Testing for bullet charts</h2>
+  <svg class="bchart"></svg>
 </body>
 <script>
   sparkline = d3.sparkline();
@@ -38,5 +42,45 @@
     sparkline('#spark_cooller_lostworld', data);
   });
  
+  var margin = {top: 5, right: 40, bottom: 20, left: 120},
+      width = 960 - margin.left - margin.right,
+      height = 50 - margin.top - margin.bottom;
+  
+  var chart = d3.bullet()
+    .width(width)
+    .height(height);
+    
+  d3.tsv("http://qlglicko.org/stats/rank/rapha"), function(error, data) {
+    data.forEach(function(d) {
+      d.title = d.Player;
+      d.subtitle = d.Map;
+      d.ranges = [1200, 1700, 2200];
+      d.measures = [d.Rank - d.RD, d.Rank];
+      d.markers = [d.Rank - (2 * d.RD)];
+    });
+
+    var svg = d3.select("body").selectAll(".bchart")
+        .data(data)
+      .enter().append("svg")
+        .attr("class", "bullet")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append('g')
+        .attr('transform', "translate(" + margin.left + "," + margin.top + ")")
+        .call(chart);
+        
+    var title = svg.append('g')
+      .style("text-anchor", "end")
+      .attr('transform', "translate(-6,", + height / 2 + ")");
+    
+    title.append('text')
+      .attr('class', 'title')
+      .text(function(d) { return d.title; });
+      
+    title.append('text')
+      .attr('class', 'subtitle')
+      .attr('dy', "1em")
+      .text(function (d) { return d.subtitle; });
+
 </script>
 </html>

@@ -13,5 +13,7 @@
                  ]},
   {modules, []},                 
   {mod, { qlglicko_web_app, []}},
-  {env, []}
+  {env, [
+    {current_date, {2014, 11, 25}}
+  ]}
  ]}.

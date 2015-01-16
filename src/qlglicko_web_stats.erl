@@ -46,6 +46,9 @@ rest_init(Req, []) ->
     {ok, Req, #state { q = undefined }};
 rest_init(Req, [map_count]) ->
     {ok, Req, #state { q = map_count }};
+rest_init(Req, [overview]) ->
+    {Player, Req2} = cowboy_req:binding(player, Req),
+    {ok, Req2, #state { q = {overview, Player} }};
 rest_init(Req, [rank]) ->
     {Player, Req2} = cowboy_req:binding(player, Req),
     {Map, Req3} = cowboy_req:binding(map, Req2),
@@ -60,14 +63,22 @@ content_types_provided(Req, State) ->
 resource_exists(Req, #state { q = map_count } = State) ->
     Data = qlg_db:duel_counts(),
     {true, Req, State#state { r = Data }};
+resource_exists(Req, #state { q = {overview, P}} = State) ->
+    case qlg_db:player_overview(current_date(), P) of
+        not_found -> {false, Req, State};
+        {ok, Data} -> {true, Req, State#state { r = Data }}
+    end;
 resource_exists(Req, #state { q = {rank, P, M}} = State) ->
     case qlg_db:player_rankings(P, M) of
-      not_found -> {false, Req, State};
-      {ok, Data} -> {true, Req, State#state { r = Data }}
+        not_found -> {false, Req, State};
+        {ok, Data} -> {true, Req, State#state { r = Data }}
     end.
 
 get_tsv(Req, #state { q = map_count, r = Data } = State) ->
     Output = [tsv:header(["Map", "Count"]) | tsv:data(Data)],
+    {Output, age(Req), State};
+get_tsv(Req, #state { q = {overview, _P}, r = Data } = State) ->
+    Output = [tsv:header(["Player", "Map", "Rank", "RD", "Sigma"]) | tsv:data(Data)],
     {Output, age(Req), State};
 get_tsv(Req, #state { q = {rank, _P, _M}, r = Data } = State) ->
     Output = [tsv:header(["Date", "Rank", "RankDeviation", "Sigma"]) | tsv:data(Data)],
@@ -79,6 +90,10 @@ terminate(_Reason, _Req, _State) ->
 
 %% Internal players
 %% -------------------------------
+
+current_date() ->
+    {ok, CurDate} = application:get_env(qlglicko_web, current_date),
+    CurDate.
 
 age(Req) ->
     cowboy_req:set_resp_header(<<"Cache-Control">>,
