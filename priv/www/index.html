@@ -50,7 +50,7 @@
     .width(width)
     .height(height);
     
-  d3.tsv("http://qlglicko.org/stats/rank/rapha"), function(error, data) {
+  d3.tsv("http://qlglicko.org/stats/rank/rapha", function(error, data) {
     data.forEach(function(d) {
       d.title = d.Player;
       d.subtitle = d.Map;
