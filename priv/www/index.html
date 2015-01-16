@@ -22,7 +22,7 @@
   <p>Here is the current status for the player Rapha on the map Aerowalk: <span id="spark_rapha_aerowalk"></span>and as you can see, these are in-line images which can placed in text. Aerowalk is not the strongest map from Rapha, where some would argue that it is Lost World: <span id="spark_rapha_lostworld"></span>.</p>
   <p>Rapha's main opponent back in the day was Cooller, here on Lost world as well: <span id="spark_cooller_lostworld"></span>.</p>
   <h2>Testing for bullet charts</h2>
-  <svg class="bchart"></svg>
+  <div class="bchart"></div>
 </body>
 <script>
   sparkline = d3.sparkline();
@@ -61,7 +61,7 @@
       d.markers = [d.Rank - (2 * d.RD)];
     });
 
-    var svg = d3.select("body").selectAll(".bchart")
+    var svg = d3.select(".bchart").selectAll("svg")
         .data(data)
       .enter().append("svg")
         .attr("class", "bullet")
