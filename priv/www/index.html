@@ -25,6 +25,10 @@
   <button id="cooller_button">Cooller</button>
   <button id="rapha_button">Rapha</button>
   <button id="evil_button">Evil</button>
+  <button id="agent_button">Agent</button>
+  <button id="clawz_button">Clawz</button>
+  <button id="cypher_button">Cypher</button>
+  <button id="strenx_button">STRENX!!!!!!!!!</button>
   <div class="bchart"></div>
 </body>
 <script>
@@ -103,6 +107,30 @@
     });
     d3.selectAll("#evil_button").on('click', function() {
       d3.tsv("http://qlglicko.org/stats/rank/evil", function(error, data) {
+        interpret(data);
+        svg.data(data).call(chart.duration(1000));
+      });
+    });
+    d3.selectAll("#agent_button").on('click', function() {
+      d3.tsv("http://qlglicko.org/stats/rank/agent", function(error, data) {
+        interpret(data);
+        svg.data(data).call(chart.duration(1000));
+      });
+    });
+    d3.selectAll("#clawz_button").on('click', function() {
+      d3.tsv("http://qlglicko.org/stats/rank/clawz", function(error, data) {
+        interpret(data);
+        svg.data(data).call(chart.duration(1000));
+      });
+    });
+    d3.selectAll("#cypher_button").on('click', function() {
+      d3.tsv("http://qlglicko.org/stats/rank/cypher", function(error, data) {
+        interpret(data);
+        svg.data(data).call(chart.duration(1000));
+      });
+    });
+    d3.selectAll("#strenx_button").on('click', function() {
+      d3.tsv("http://qlglicko.org/stats/rank/strenx", function(error, data) {
         interpret(data);
         svg.data(data).call(chart.duration(1000));
       });
