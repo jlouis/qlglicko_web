@@ -22,6 +22,8 @@
   <p>Here is the current status for the player Rapha on the map Aerowalk: <span id="spark_rapha_aerowalk"></span>and as you can see, these are in-line images which can placed in text. Aerowalk is not the strongest map from Rapha, where some would argue that it is Lost World: <span id="spark_rapha_lostworld"></span>.</p>
   <p>Rapha's main opponent back in the day was Cooller, here on Lost world as well: <span id="spark_cooller_lostworld"></span>.</p>
   <h2>Testing for bullet charts</h2>
+  <p>The following is a so-called bullet chart of different players on different maps. Here is how to read the chart: All players start at 1200 in strength and this is marked in a change of the grayscale at the background. The chart maxes at 2400 which no player has reached yet. The middle, 1800 is also marked. The blue bar marks the current <em>Rank</em> of the player. And finally, the black marker is a current conservative strength of the player and probably a good measure of the players current skill.</p>
+  <p>The current strength is calculated as R-2*RD which is as the minimal point in the confidence interval of that player. This penalizes players who doesn't play as much as other players and also gives higher ratings to players in which we have confidence.</p>
   <button id="cooller_button">Cooller</button>
   <button id="rapha_button">Rapha</button>
   <button id="evil_button">Evil</button>
@@ -62,7 +64,7 @@
       d.title = d.Map;
       d.subtitle = '-';
       d.ranges = [1200, 1800, 2400];
-      d.measures = [d.Rank - d.RD, d.Rank];
+      d.measures = [d.Rank];
       d.markers = [d.Rank - (2 * d.RD)];
     });
   };
