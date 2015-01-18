@@ -153,16 +153,18 @@
   });
 
   function handleSearch(ev) {
-    var player = d3.selectAll("#search_player")[0][0].value;
-    console.log(player);
+    var player = d3.selectAll("#search_player")[0][0];
+    console.log(player.value);
 
     var svg = d3.select(".bchart").selectAll("svg")
     
-    d3.tsv("http://qlglicko.org/stats/rank/" + player, function(error, data) {
+    d3.tsv("http://qlglicko.org/stats/rank/" + player.value, function(error, data) {
       interpret(data);
       svg.data(data).call(chart.duration(1000));
     });
     
+    player.focus();
+    player.select();
     return false;
   }
   
