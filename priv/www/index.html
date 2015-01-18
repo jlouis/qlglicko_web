@@ -32,7 +32,7 @@
   <button id="cypher_button">Cypher</button>
   <button id="strenx_button">STRENX!!!!!!!!!</button>
   <button id="k1llsen_button">K1LLSEN CAM!</button>
-  <form name="search_form" onSubmit="return handleSearch()">
+  <form name="search_form" onSubmit="event.preventDefault(); return searchPlayer();">
     <input name="Submit"  type="submit" value="Search Player" >
     <input type="text" id="search_player" placeholder="Enter player&hellip;">
   </form>
@@ -152,9 +152,7 @@
           
   });
 
-  function handleSearch(event) {
-    event.preventDefault();
-
+  function handleSearch(ev) {
     var player = document.getElementByID("search_player").value;
     console.log(player);
 
