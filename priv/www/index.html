@@ -32,9 +32,14 @@
   <button id="cypher_button">Cypher</button>
   <button id="strenx_button">STRENX!!!!!!!!!</button>
   <button id="k1llsen_button">K1LLSEN CAM!</button>
+  <form name="search_form" onSubmit="return handleSearch()">
+    <input name="Submit"  type="submit" value="Search Player" >
+    <input type="text" id="search_player" placeholder="Enter player&hellip;">
+  </form>
   <div class="bchart"></div>
 </body>
 <script>
+
   sparkline = d3.sparkline();
 
   d3.tsv('http://qlglicko.org/stats/rank/rapha/aerowalk', function(error, data) {
@@ -60,7 +65,7 @@
     .width(width)
     .height(height);
     
-  interpret = function(data) {
+  var interpret = function(data) {
     data.forEach(function(d) {
       d.title = d.Map;
       d.subtitle = '-';
@@ -147,5 +152,21 @@
           
   });
 
+  function handleSearch(event) {
+    event.preventDefault();
+
+    var player = document.getElementByID("search_player").value;
+    console.log(player);
+
+    var svg = d3.select(".bchart").selectAll("svg")
+    
+    d3.tsv("http://qlglicko.org/stats/rank/" + player, function(error, data) {
+      interpret(data);
+      svg.data(data).call(chart.duration(1000));
+    });
+    
+    return false;
+  }
+  
 </script>
 </html>
