@@ -31,6 +31,7 @@
   <button id="clawz_button">Clawz</button>
   <button id="cypher_button">Cypher</button>
   <button id="strenx_button">STRENX!!!!!!!!!</button>
+  <button id="k1llsen_button">K1LLSEN CAM!</button>
   <div class="bchart"></div>
 </body>
 <script>
@@ -133,6 +134,12 @@
     });
     d3.selectAll("#strenx_button").on('click', function() {
       d3.tsv("http://qlglicko.org/stats/rank/strenx", function(error, data) {
+        interpret(data);
+        svg.data(data).call(chart.duration(1000));
+      });
+    });
+    d3.selectAll("#k1llsen_button").on('click', function() {
+      d3.tsv("http://qlglicko.org/stats/rank/k1llsen", function(error, data) {
         interpret(data);
         svg.data(data).call(chart.duration(1000));
       });
