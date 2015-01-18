@@ -37,6 +37,35 @@
     <input type="text" id="search_player" placeholder="Enter player&hellip;">
   </form>
   <div class="bchart"></div>
+  <h1>FAQ</h1>
+  <dl>
+    <dt>How is the ranking done</dt>
+    <dd>Matches you play are eventually scanned by the crawler. It is pretty slow since it does not want to overload the QL site. When the matches have been crawled, all matches less than a minute is filtered out. The reason is that we are trying to guage skill levels of players and not even trying doesn't count. Also, we filter out matches which are unranked, as we expect these to have no worth in the ranking. Then the matches are entered into the Glicko 2 ranking system for updating the <em>Rank</em> and the <em>Rank Deviation</em>. The first number is the current skill level and the second tracks the confidence in that skill level by the system.</dd>
+    <dt>When did you start collecting data?</dt>
+    <dd>Data collection started from the 1st of February 2012. I may have missed a couple of early matches around that point in time.</dd>
+    <dt>What are the initial configuration values for Glicko 2?</dt>
+	<dd>Starting rank r = 1200, the initial rank deviation is 285, the σ value is 0.06 and τ = 0.59. These values have been found by tuning the system for the best prediction. Prediction is run on 149 weeks of data. 146 weeks are collected normally and we predict on 147-149. The optimization function used is Nelder-Mead, which has proven to work reasonably well for this data set.</dd>
+    <dt>What tools are used for this site?</dt>
+    <dd>The front-end is written in Javascript and renders using the d3 javascript library. The backend is a mix of the Erlang programming language by Ericsson, using Cowboy as a web server and Hackney to fetch data. Calculations for ranking and optimization are done in the language Go by Google. Finally, there is a Varnish cache in front of the system to make your page requests even more speedy.</dd>
+    <dt>Your page looks like crap!</dt>
+    <dd>I am sorry. You should be able to present a nicer layout yourself, so grab your text editor and then get to hacking the layout and look of the site. This is just to get up and running quickly. If you want to hack on the page, don't hesitate to contact me: jesper.louis.andersen at gmail.com.</dd>
+    <dt>What is the affiliation to the QLRanks site?</dt>
+    <dd>We are not connected in any way. I respect the work done by QLRanks which is awesome. Their match data is more online which means they have results faster and they know a lot more about what is happening <em>right now</em> on Quake Live. QLGlicko is more interested in long-term rankings of players and as such uses a more advanced and computationally intensive algorithm. QLGlicko is always lagging behind current performance by some margin. Usually about 1 to 1.5 weeks. Another point is we rank per map, whereas QLRanks is ranking players with an overall score.</dd>
+    <dt>Can't you rank TDM or CTF also?</dt>
+    <dd>Glicko 2 is explicitly a 1v1 ranking system. It is not possible to adopt it to a multiplayer situation. We would need to employ a different ranking system.</dd>
+    <dt>How about CA then?</dt>
+    <dd>CA is not a competitive mode, so go to hell. Only mad frenchmen like H3artless plays it. More seriously though, the problem with CA is the same as with TDM and CTF. We need another ranking system for those.</dd>
+    <dt>HoN, LoL or DOTA 2?</dt>
+    <dd>DOTA 2 of course! The other games are boring to watch</dd>
+    <dt>SC2, WoW or D3?</dt>
+    <dd>D2, naturally. Or Titan Quest. Or Path of Exile.</dd>
+    <dt>What do you feel about Shootmania?</dt>
+    <dd>Like everyone else I fall asleep when I watch it. I'd much rather hack code on this site than looking at Shootmania.</dd>
+    <dt>What about CPMA then?</dt>
+    <dd>CPMA is awesome!</dd>
+    <dt>My question is not answered!</dt>
+    <dd>Oh, the horror! If you feel it is a good question, contact me</dd>
+  </dl>  
 </body>
 <script>
 
