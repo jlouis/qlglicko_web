@@ -13,7 +13,7 @@
          terminate/3]).
 
 -record(state, {
-	q :: map_count | {rank, binary(), binary()},
+	q :: map_count | {rank, binary(), binary()} | {overview, binary()},
 	r = undefined :: any()
 }).
 

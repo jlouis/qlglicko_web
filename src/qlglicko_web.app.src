@@ -1,7 +1,7 @@
 {application, qlglicko_web,
  [
-  {description, ""},
-  {vsn, "1"},
+  {description, "QLGlicko Web component for exporting data over HTTP"},
+  {vsn, "1.0.0"},
   {registered, []},
   {applications, [
                   kernel,

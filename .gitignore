@@ -1,3 +1,13 @@
-/ebin/*.beam
-
-/ebin/qlglicko_web.app
+.rebar
+.rebar3
+ebin
+*.beam
+*.o
+*.eqc
+*.so
+eqc_test/.eqc-info
+doc/edoc-info
+doc/*.html
+doc/*.png
+doc/*.css
+_build
